@@ -23,16 +23,17 @@ require_once '../vendor/autoload.php';
 require '../src/Database.php';
 require '../src/Container.php';
 
-$config = Yaml::parseFile('../config/config.yaml');
-
 $container = new Container();
 
-$container->set(Database::class, function () use ($config) {
+$container->set(Database::class, function ()  {
+    $config = Yaml::parseFile('../config/config.yaml');
+    $db_config = $config['database'];
+
     return new Database(
-        $config['database']['host'],
-        $config['database']['user'],
-        $config['database']['pass'],
-        $config['database']['db'],
+        $db_config['host'],
+        $db_config['user'],
+        $db_config['pass'],
+        $db_config['db'],
     );
 });
 
