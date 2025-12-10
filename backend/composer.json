@@ -5,7 +5,8 @@
             "Entities\\": "src/Entities/",
             "Framework\\": "src/Framework/",
             "Repositories\\": "src/Repositories/",
-            "Services\\": "src/Services/"
+            "Services\\": "src/Services/",
+            "Factories\\": "src/Factories/"
         }
     },
     "require-dev": {

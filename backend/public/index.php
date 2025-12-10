@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Factories\RepositoryFactory;
+use Factories\ServiceFactory;
 use Framework\Router;
 use Controllers\GetSingleArticleController;
 use Controllers\GetAllArticlesController;
@@ -40,11 +42,20 @@ $container->set(Database::class, function ()  {
 $db     = $container->get(Database::class);
 $mysqli = $db->getConnection();
 
+$repoFactory = new RepositoryFactory($mysqli);
+$serviceFactory = new ServiceFactory($container);
+
 $repositories = [
-    ArticleRepository::class => $mysqli,
-    CommentRepository::class => $mysqli,
-    AuthRepository::class => $mysqli,
+    ArticleRepository::class,
+    CommentRepository::class,
+    AuthRepository::class,
 ];
+
+foreach ($repositories as $repoClass) {
+    $container->set($repoClass, function () use ($repoClass, $repoFactory) {
+        return $repoFactory->create($repoClass);
+    });
+}
 
 $services = [
     ArticleService::class => ArticleRepository::class,
@@ -52,16 +63,9 @@ $services = [
     AuthService::class => AuthRepository::class,
 ];
 
-foreach ($repositories as $repoClass => $mysqliInstance) {
-    $container->set($repoClass, function () use ($mysqliInstance, $repoClass) {
-        return new $repoClass($mysqliInstance);
-    });
-}
-
 foreach ($services as $serviceClass => $dependencyClass) {
-    $container->set($serviceClass, function () use ($container, $dependencyClass, $serviceClass) {
-        $dependencyInstance = $container->get($dependencyClass);
-        return new $serviceClass($dependencyInstance);
+    $container->set($serviceClass, function () use ($serviceClass, $dependencyClass, $serviceFactory) {
+        return $serviceFactory->create($serviceClass, $dependencyClass);
     });
 }
 
