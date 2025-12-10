@@ -18,20 +18,20 @@ use Services\ArticleService;
 use Services\AuthService;
 use Services\CommentService;
 
-require 'src/Autoloader.php';
-require 'src/Database.php';
-require 'src/Container.php';
-
-Autoloader::register();
+require_once '../vendor/autoload.php';
+require '../src/Database.php';
+require '../src/Container.php';
 
 $container = new Container();
 
-$container->set(Database::class, function(){
-                    return new Database('localhost',
-                                        'root',
-                                        'root',
-                                        'blog_app');
-                });
+$container->set(Database::class, function () {
+    return new Database(
+        'localhost',
+        'root',
+        'root',
+        'blog_app'
+    );
+});
 
 $db     = $container->get(Database::class);
 $mysqli = $db->getConnection();
@@ -49,13 +49,13 @@ $services = [
 ];
 
 foreach ($repositories as $repoClass => $mysqliInstance) {
-    $container->set($repoClass, function() use ($mysqliInstance, $repoClass) {
+    $container->set($repoClass, function () use ($mysqliInstance, $repoClass) {
         return new $repoClass($mysqliInstance);
     });
 }
 
 foreach ($services as $serviceClass => $dependencyClass) {
-    $container->set($serviceClass, function() use ($container, $dependencyClass, $serviceClass) {
+    $container->set($serviceClass, function () use ($container, $dependencyClass, $serviceClass) {
         $dependencyInstance = $container->get($dependencyClass);
         return new $serviceClass($dependencyInstance);
     });

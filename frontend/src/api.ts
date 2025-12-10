@@ -1,5 +1,5 @@
 // const API = "http://localhost:8888/backend"; // docker
-const API = "http://localhost:8888/pbe-block/backend/index.php"; // mamp
+const API = "http://localhost:8888/pbe-block/backend/public/index.php"; // mamp
 
 export const api = {
     getArticles: async (page: number) => {

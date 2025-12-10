@@ -1,0 +1,14 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Controllers\\": "src/Controllers/",
+            "Entities\\": "src/Entities/",
+            "Framework\\": "src/Framework/",
+            "Repositories\\": "src/Repositories/",
+            "Services\\": "src/Services/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    }
+}
