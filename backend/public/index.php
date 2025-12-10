@@ -17,19 +17,22 @@ use Repositories\AuthRepository;
 use Services\ArticleService;
 use Services\AuthService;
 use Services\CommentService;
+use Symfony\Component\Yaml\Yaml;
 
 require_once '../vendor/autoload.php';
 require '../src/Database.php';
 require '../src/Container.php';
 
+$config = Yaml::parseFile('../config/config.yaml');
+
 $container = new Container();
 
-$container->set(Database::class, function () {
+$container->set(Database::class, function () use ($config) {
     return new Database(
-        'localhost',
-        'root',
-        'root',
-        'blog_app'
+        $config['database']['host'],
+        $config['database']['user'],
+        $config['database']['pass'],
+        $config['database']['db'],
     );
 });
 

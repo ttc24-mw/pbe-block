@@ -6,3 +6,5 @@
 
 /backend/.env
 /backend/vendor
+/backend/composer.lock
+/backend/composer.phar
