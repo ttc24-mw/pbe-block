@@ -6,7 +6,8 @@
             "Framework\\": "src/Framework/",
             "Repositories\\": "src/Repositories/",
             "Services\\": "src/Services/",
-            "Factories\\": "src/Factories/"
+            "Factories\\": "src/Factories/",
+            "tests\\": "tests/"
         }
     },
     "require-dev": {

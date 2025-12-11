@@ -36,6 +36,7 @@ $container->set(Database::class, function ()  {
         $db_config['user'],
         $db_config['pass'],
         $db_config['db'],
+        $db_config['port'],
     );
 });
 
