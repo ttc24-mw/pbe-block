@@ -6,7 +6,7 @@ use Repositories\ArticleRepository;
 use Repositories\AuthRepository;
 use Repositories\CommentRepository;
 
-class RepositoryFactory
+class RepositoryFactory implements FactoryInterface
 {
     private $mysqli;
 
@@ -15,7 +15,7 @@ class RepositoryFactory
         $this->mysqli = $mysqli;
     }
 
-    public function create(string $repoClass): Object
+    public function create(string $repoClass, ?string $dependencyClass = null): Object
     {
         if($repoClass === ArticleRepository::class ||
            $repoClass === CommentRepository::class ||

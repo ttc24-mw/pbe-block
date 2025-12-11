@@ -6,7 +6,7 @@ use Services\ArticleService;
 use Services\AuthService;
 use Services\CommentService;
 
-class ServiceFactory
+class ServiceFactory implements FactoryInterface
 {
     private $container;
 
@@ -15,7 +15,7 @@ class ServiceFactory
         $this->container = $container;
     }
 
-    public function create(string $serviceClass, string $dependencyClass): Object
+    public function create(string $serviceClass, ?string $dependencyClass = null): Object
     {
         if($serviceClass === ArticleService::class ||
            $serviceClass === CommentService::class ||
