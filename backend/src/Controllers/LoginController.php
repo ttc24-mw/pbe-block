@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Controllers;
 
-use Services\AuthService;
+use CommandHandlers\LoginUserHandler;
+use Commands\LoginUserCommand;
 use Controllers\ControllerInterface;
 use Exception;
 
 class LoginController implements ControllerInterface
 {
-    private AuthService $service;
+    private LoginUserHandler $handler;
 
-    public function __construct(AuthService $service)
+    public function __construct(LoginUserHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -28,8 +29,10 @@ class LoginController implements ControllerInterface
         $username = $body['username'];
         $password = $body['password'];
 
+        $command = new LoginUserCommand($username, $password);
+
         try {
-            $this->service->login($username, $password);
+            $this->handler->handle($command);
         } catch (Exception $e) {
             http_response_code(500);
             return ['error' => $e->getMessage()];

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Controllers;
 
-use Services\ArticleService;
+use Queries\GetSingleArticleQuery;
+use QueryHandlers\GetSingleArticleHandler;
 use Controllers\ControllerInterface;
 use Exception;
 
@@ -12,11 +13,11 @@ require_once 'ControllerInterface.php';
 
 class GetSingleArticleController implements ControllerInterface
 {
-    private ArticleService $service;
+    private GetSingleArticleHandler $handler;
 
-    public function __construct(ArticleService $service)
+    public function __construct(GetSingleArticleHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -29,8 +30,10 @@ class GetSingleArticleController implements ControllerInterface
 
         $id = (int)$queryParams['id'];
 
+        $query = new GetSingleArticleQuery($id);
+
         try {
-            $article = $this->service->getSingleArticleById($id);
+            $article = $this->handler->handle($query);
             echo json_encode($article);
         } catch (Exception $e) {
             http_response_code(500);

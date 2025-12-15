@@ -2,20 +2,19 @@
 
 namespace Framework;
 
-use Controllers\ControllerInterface;
 use Exception;
 
-class Router
+class Dispatcher
 {
-    private array $routes = [];
+    private $routes = [];
 
-    public function add(string $path, string $controllerClass, string $method, $service)
+    public function add(string $path, string $controllerClass, string $method, $handler)
     {
         $this->routes[] = [
             'path' => $path,
             'controller' => $controllerClass,
             'method' => $method,
-            'service' => $service
+            'handler' => $handler,
         ];
     }
 
@@ -38,11 +37,7 @@ class Router
 
                 $GLOBALS['body'] = json_decode(file_get_contents('php://input'), true);
 
-                // if ($controllerClass instanceof ControllerInterface) {
-                    $controller = new $controllerClass($route['service']);
-                // } else {
-                //     $controller = new $controllerClass();
-                // }
+                $controller = new $controllerClass($route['handler']);
 
                 try {
                     $controller->handle();
@@ -56,5 +51,6 @@ class Router
         }
 
         http_response_code(404);
+        echo json_encode(['error' => 'Not found']);
     }
 }

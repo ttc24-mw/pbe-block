@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Controllers;
 
-use Services\ArticleService;
+use CommandHandlers\PostArticleHandler;
+use Commands\PostArticleCommand;
 use Controllers\ControllerInterface;
 use Exception;
 
 class PostArticleController implements ControllerInterface
 {
-    private ArticleService $service;
+    private PostArticleHandler $handler;
 
-    public function __construct(ArticleService $service)
+    public function __construct(PostArticleHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -29,8 +30,10 @@ class PostArticleController implements ControllerInterface
         $content = $body['text'];
         $url = $body['url'];
 
+        $command = new PostArticleCommand($title, $content, $url);
+
         try {
-            $this->service->postArticle($title, $content, $url);
+            $this->handler->handle($command);
         } catch (Exception $e) {
             http_response_code(500);
             return ['error' => $e->getMessage()];

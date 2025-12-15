@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+namespace QueryHandlers;
 
-namespace Services;
-
-use Entities\Article;
 use Repositories\ArticleRepository;
+use Queries\GetAllArticlesQuery;
 
-class ArticleService
+class GetAllArticlesHandler
 {
     protected ArticleRepository $repository;
 
@@ -16,10 +14,13 @@ class ArticleService
         $this->repository = $repository;
     }
 
-    public function getArticlesPaginated(int $page, int $perPage): array
+    public function handle(GetAllArticlesQuery $query): array
     {
+        $perPage = $query->perPage;
+        $page = $query->page;
+
         $totalArticles = $this->repository->getTotalArticlesCount();
-        $totalPages = ceil($totalArticles / $perPage);
+        $totalPages = ceil($totalArticles / $query->perPage);
         $offset = ($page - 1) * $perPage;
 
         $articles = $this->repository->getAllArticles($perPage, $offset);
@@ -29,15 +30,5 @@ class ArticleService
             'totalPages' => $totalPages,
             'currentPage' => $page,
         ];
-    }
-
-    public function getSingleArticleById(int $id): ?Article
-    {
-        return $this->repository->getArticleById($id);
-    }
-
-    public function postArticle(String $title, String $content, String $url): void
-    {
-        $this->repository->postArticle($title, $content, $url);
     }
 }

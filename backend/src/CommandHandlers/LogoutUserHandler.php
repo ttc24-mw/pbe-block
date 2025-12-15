@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Services;
+namespace CommandHandlers;
 
 use Repositories\AuthRepository;
 
-class AuthService
+class LogoutUserHandler
 {
     protected AuthRepository $repository;
 
@@ -15,12 +13,7 @@ class AuthService
         $this->repository = $repository;
     }
 
-    public function login(String $username, String $password): void
-    {
-        $this->repository->login($username, $password);
-    }
-
-    public function logout(): void
+    public function handle(): void
     {
         $this->repository->logout();
     }

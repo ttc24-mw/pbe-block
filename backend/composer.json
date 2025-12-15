@@ -1,9 +1,14 @@
 {
     "autoload": {
         "psr-4": {
+            "CommandHandlers\\": "src/CommandHandlers/",
+            "Commands\\": "src/Commands/",
             "Controllers\\": "src/Controllers/",
+            "DTOs\\": "src/DTOs/",
             "Entities\\": "src/Entities/",
             "Framework\\": "src/Framework/",
+            "Queries\\": "src/Queries/",
+            "QueryHandlers\\": "src/QueryHandlers/",
             "Repositories\\": "src/Repositories/",
             "Services\\": "src/Services/",
             "Factories\\": "src/Factories/",

@@ -1,8 +1,8 @@
 <?php
 
+use CommandHandlers\PostCommentHandler;
 use PHPUnit\Framework\TestCase;
 use Controllers\PostCommentController;
-use Services\CommentService;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -10,8 +10,8 @@ class PostCommentControllerTest extends TestCase
 {
     public function testHandleCallsPostCommentWithValidInput()
     {
-        $mockService = $this->createMock(CommentService::class);
-        $mockService->expects($this->once())
+        $mockPostCommentHandler = $this->createMock(PostCommentHandler::class);
+        $mockPostCommentHandler->expects($this->once())
             ->method('postComment')
             ->with(
                 $this->equalTo(123),
@@ -29,14 +29,14 @@ class PostCommentControllerTest extends TestCase
             'commentText' => 'This is a comment'
         ];
 
-        $controller = new PostCommentController($mockService);
+        $controller = new PostCommentController($mockPostCommentHandler);
 
         $controller->handle();
     }
 
     public function testHandleDoesNotCallPostCommentWhenBodyIncomplete()
     {
-        $mockService = $this->createMock(CommentService::class);
+        $mockPostCommentHandler = $this->createMock(PostCommentHandler::class);
 
         $GLOBALS['body'] = [
             'articleId' => 123,
@@ -45,9 +45,9 @@ class PostCommentControllerTest extends TestCase
             // 'commentText' is missing
         ];
 
-        $controller = new PostCommentController($mockService);
+        $controller = new PostCommentController($mockPostCommentHandler);
         $controller->handle();
 
-        $mockService->expects($this->never())->method('postComment');
+        $mockPostCommentHandler->expects($this->never())->method('postComment');
     }
 }

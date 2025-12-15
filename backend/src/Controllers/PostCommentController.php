@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Controllers;
 
-use Services\CommentService;
+use CommandHandlers\PostCommentHandler;
+use Commands\PostCommentCommand;
 use Controllers\ControllerInterface;
 use Exception;
 
 class PostCommentController implements ControllerInterface
 {
-    private CommentService $service;
+    private PostCommentHandler $handler;
 
-    public function __construct(CommentService $service)
+    public function __construct(PostCommentHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -31,8 +32,10 @@ class PostCommentController implements ControllerInterface
         $url = $body['url'];
         $comment_text = $body['commentText'];
 
+        $command = new PostCommentCommand($article_id, $name, $email, $url, $comment_text);
+
         try {
-            $this->service->postComment($article_id, $name, $email, $url, $comment_text);
+            $this->handler->handle($command);
         } catch (Exception $e) {
             http_response_code(500);
             echo 'error';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Repositories;
 
-use Entities\Article;
+use DTOs\ArticleDTO;
 
 class ArticleRepository
 {
@@ -43,7 +43,7 @@ class ArticleRepository
         $result = $stmt->get_result();
         $articles = [];
         while ($row = $result->fetch_assoc()) {
-            $articles[] = new Article(
+            $articles[] = new ArticleDTO(
                 (int)$row['id'],
                 $row['title'],
                 $row['content'],
@@ -59,7 +59,7 @@ class ArticleRepository
     }
 
 
-    public function getArticleById(int $id): ?Article
+    public function getArticleById(int $id): ?ArticleDTO
     {
         $query = "SELECT a.id, a.title, a.content, a.created_at, a.picture_url, a.comments_count, u.name AS author_name
                 FROM articles a
@@ -73,7 +73,7 @@ class ArticleRepository
         $row = $result->fetch_assoc();
 
 
-        $article = new Article(
+        $article = new ArticleDTO(
             (int)$row['id'],
             $row['title'],
             $row['content'],

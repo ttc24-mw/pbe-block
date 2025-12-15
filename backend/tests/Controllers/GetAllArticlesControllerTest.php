@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use Controllers\GetAllArticlesController;
+use QueryHandlers\GetAllArticlesHandler;
 use Repositories\ArticleRepository;
-use Services\ArticleService;
 use Symfony\Component\Yaml\Yaml;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -38,8 +38,8 @@ class GetAllArticlesControllerTest extends TestCase
         $mysqli = $db->getConnection();
 
         $articleRepo = new ArticleRepository($mysqli);
-        $articleService = new ArticleService($articleRepo);
-        $controller = new GetAllArticlesController($articleService);
+        $getAllArticlesHandler = new GetAllArticlesHandler($articleRepo);
+        $controller = new GetAllArticlesController($getAllArticlesHandler);
 
         $GLOBALS['queryParams'] = ['page' => '1'];
 

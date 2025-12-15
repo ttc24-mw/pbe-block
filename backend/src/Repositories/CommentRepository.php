@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Repositories;
 
-use Entities\Comment;
+use DTOs\CommentDTO;
 
 class CommentRepository
 {
@@ -30,7 +30,7 @@ class CommentRepository
 
         $comments = [];
         while ($row = $result->fetch_assoc()) {
-            $comments[] = new Comment(
+            $comments[] = new CommentDTO(
                             (int)$row['id'],
                             (int)$row['article_id'],
                             $row['name'],

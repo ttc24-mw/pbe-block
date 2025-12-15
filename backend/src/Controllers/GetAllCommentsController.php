@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Controllers;
 
-use Services\CommentService;
+use Queries\GetCommentsQuery;
+use QueryHandlers\GetCommentsHandler;
 use Controllers\ControllerInterface;
 use Exception;
 
 class GetAllCommentsController implements ControllerInterface
 {
-    private CommentService $service;
+    private GetCommentsHandler $handler;
 
-    public function __construct(CommentService $service)
+    public function __construct(GetCommentsHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -27,8 +28,10 @@ class GetAllCommentsController implements ControllerInterface
 
         $id = (int)$queryParams['id'];
 
+        $query = new GetCommentsQuery($id);
+
         try {
-            $comments = $this->service->getComments($id);
+            $comments = $this->handler->handle($query);
             echo json_encode($comments);
         } catch (Exception $e) {
             http_response_code(500);

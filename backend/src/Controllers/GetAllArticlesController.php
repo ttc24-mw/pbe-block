@@ -6,15 +6,16 @@ namespace Controllers;
 
 use Controllers\ControllerInterface;
 use Exception;
-use Services\ArticleService;
+use QueryHandlers\GetAllArticlesHandler;
+use Queries\GetAllArticlesQuery;
 
 class GetAllArticlesController implements ControllerInterface
 {
-    private ArticleService $service;
+    private GetAllArticlesHandler $handler;
 
-    public function __construct(ArticleService $service)
+    public function __construct(GetAllArticlesHandler $handler)
     {
-        $this->service = $service;
+        $this->handler = $handler;
     }
 
     public function handle()
@@ -24,9 +25,10 @@ class GetAllArticlesController implements ControllerInterface
         $articlesPerPage = 3;
         $page = isset($queryParams['page']) ? (int)$queryParams['page'] : 1;
 
-        try {
-            $articles = $this->service->getArticlesPaginated($page, $articlesPerPage);
+        $query = new GetAllArticlesQuery($page, $articlesPerPage);
 
+        try {
+            $articles = $this->handler->handle($query);
             echo json_encode($articles);
         } catch (Exception $e) {
             http_response_code(500);
